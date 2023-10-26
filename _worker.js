@@ -1,8 +1,11 @@
-let LOGFLARE_API_KEY = '7247776c71d2e770fe397ebcf7c28c6fb14f14a81ab73c83217abb0b42678204';
+let LOGFLARE_API_KEY = 'OX9_n1kPX8_p';
 let LOGFLARE_SOURCE_ID = 'fd15aaf1-8dec-4c6a-bd44-56e57b0c93e2';
-let headersStr = '';
+// let headersStr = '';
 
 async function sendLogToLogflare(logData) {
+    const url = new URL('https://api.logflare.app/logs');
+    url.searchParams.append('source', LOGFLARE_SOURCE_ID);
+
     let init = {
       method: 'POST',
       headers: {
@@ -10,12 +13,12 @@ async function sendLogToLogflare(logData) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        source: LOGFLARE_SOURCE_ID,
-        log_entry: logData,
+        metadata: {'gateway': 'cloudflare', 'app': 'openai'},
+        message: logData
       }),
     };
   
-    await fetch('https://api.logflare.app/logs', init);
+    await fetch(url, init);
 };
 
 export default {
