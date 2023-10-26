@@ -1,15 +1,37 @@
+let LOGFLARE_API_KEY = '7247776c71d2e770fe397ebcf7c28c6fb14f14a81ab73c83217abb0b42678204';
+let LOGFLARE_SOURCE_ID = 'fd15aaf1-8dec-4c6a-bd44-56e57b0c93e2';
+let headersStr = '';
+
+async function sendLogToLogflare(logData) {
+    let init = {
+      method: 'POST',
+      headers: {
+        'X-API-KEY': LOGFLARE_API_KEY,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        source: LOGFLARE_SOURCE_ID,
+        log_entry: logData,
+      }),
+    };
+  
+    await fetch('https://api.logflare.app/logs', init);
+};
+
 export default {
-  async fetch(request, env) {
-    const url = new URL(request.url);
-    console.log(url);
-    url.host = "api.openai.com";
-    console.log(url);
-    // openai is already set all CORS heasders 
-    return fetch(url, {
-      headers: request.headers,
-      method: request.method,
-      body: request.body,
-      redirect: 'follow'
-    });
-  }
+    async fetch(request, env) {
+      const url = new URL(request.url);
+      sendLogToLogflare('old: ' + url);
+      url.host = "api.openai.com";
+      sendLogToLogflare('new: ' + url);
+
+
+      // openai is already set all CORS heasders 
+      return fetch(url, {
+        headers: request.headers,
+        method: request.method,
+        body: request.body,
+        redirect: 'follow'
+      });
+    }
 }
