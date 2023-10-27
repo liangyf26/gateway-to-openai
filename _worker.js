@@ -23,9 +23,9 @@ async function sendLogToLogflare(logData) {
 
 export default {
     async fetch(request, env) {
-      // const url = new URL(request.url);
+      const url = new URL(request.url);
       // sendLogToLogflare('old: ' + url);
-      // url.host = "api.openai.com";
+      url.host = "api.openai.com";
       // sendLogToLogflare('new: ' + url);
       const clientIP = request.headers.get('CF-Connecting-IP') || "Oops, 没有找到客户端IP！";
       await sendLogToLogflare(`客户地址: ${clientIP}`);
